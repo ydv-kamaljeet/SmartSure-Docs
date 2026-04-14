@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartSure Documentation</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=DM+Mono&family=DM+Sans&display=swap" rel="stylesheet">
+
+<style>
+:root{
+--bg:#0a0c10;--surface:#1a1e2a;--border:rgba(255,255,255,0.1);
+--text:#e8eaf0;--text2:#8b90a0;--accent:#4f8ef7;
+}
+body{margin:0;font-family:'DM Sans';background:var(--bg);color:var(--text);}
+.wrap{max-width:1100px;margin:auto;padding:20px}
+
+.nav{display:flex;gap:10px;overflow:auto;border-bottom:1px solid var(--border);position:sticky;top:0;background:#000}
+.nav button{background:none;border:none;color:var(--text2);padding:15px;cursor:pointer}
+.nav button.active{color:var(--accent);border-bottom:2px solid var(--accent)}
+
+.section{display:none;padding:30px 0}
+.section.active{display:block}
+
+.card{background:var(--surface);padding:20px;border-radius:10px;margin-bottom:20px;border:1px solid var(--border)}
+.card h3{margin-top:0}
+
+.img{width:100%;border-radius:8px;cursor:pointer}
+
+.modal{display:none;position:fixed;inset:0;background:#000;justify-content:center;align-items:center}
+.modal img{max-width:90%}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<h1>SmartSure 🚀</h1>
+<p>Microservices-based Insurance Platform with Event-Driven Architecture</p>
+
+<!-- NAV -->
+<div class="nav">
+<button onclick="show('overview',this)" class="active">Overview</button>
+<button onclick="show('architecture',this)">Architecture</button>
+<button onclick="show('lld',this)">LLD</button>
+<button onclick="show('rabbitmq',this)">RabbitMQ</button>
+<button onclick="show('usecases',this)">Use Cases</button>
+<button onclick="show('er',this)">ER Diagram</button>
+<button onclick="show('flows',this)">Flows</button>
+<button onclick="show('docs',this)">Docs</button>
+</div>
+
+<!-- OVERVIEW -->
+<div id="overview" class="section active">
+
+<div class="card">
+<h3>System Overview</h3>
+<p>
+SmartSure is a microservices-based insurance platform with Identity, Policy,
+Claims, Admin, and AI services communicating via RabbitMQ.
+</p>
+</div>
+
+<div class="card">
+<h3>Tech Stack</h3>
+<ul>
+<li>Angular 19</li>
+<li>.NET Core 10</li>
+<li>RabbitMQ + MassTransit</li>
+<li>SQL Server</li>
+<li>JWT RS256</li>
+<li>Razorpay</li>
+<li>Ollama AI</li>
+</ul>
+</div>
+
+</div>
+
+<!-- ARCHITECTURE -->
+<div id="architecture" class="section">
+
+<div class="card">
+<h3>High Level Architecture</h3>
+<p>
+All requests pass through Ocelot API Gateway and are routed to services.
+Each service owns its database and communicates via events.
+</p>
+</div>
+
+<div class="card">
+<img src="HLD.png" class="img" onclick="zoom(this.src)">
+</div>
+
+</div>
+
+<!-- LLD -->
+<div id="lld" class="section">
+
+<div class="card">
+<h3>Low Level Design (Claims & Policy)</h3>
+<p>
+Detailed interaction between services, external integrations (Razorpay, SMTP,
+MEGA storage), and internal APIs.
+</p>
+</div>
+
+<div class="card">
+<iframe src="Claims and Policy-2026-04-14-104947.pdf"
+width="100%" height="600"></iframe>
+</div>
+
+</div>
+
+<!-- RABBITMQ -->
+<div id="rabbitmq" class="section">
+
+<div class="card">
+<h3>Event Driven Architecture</h3>
+<ul>
+<li>UserRegisteredEvent</li>
+<li>PolicyCreatedEvent</li>
+<li>ClaimSubmittedEvent</li>
+<li>ClaimApprovedEvent</li>
+</ul>
+</div>
+
+<div class="card">
+<img src="rabbitmq.png" class="img" onclick="zoom(this.src)">
+</div>
+
+</div>
+
+<!-- USE CASE -->
+<div id="usecases" class="section">
+
+<div class="card">
+<h3>Use Cases</h3>
+<ul>
+<li>Guest: Register/Login</li>
+<li>User: Buy Policy, Claims</li>
+<li>Admin: Manage system</li>
+</ul>
+</div>
+
+<div class="card">
+<img src="Usecase.png" class="img" onclick="zoom(this.src)">
+</div>
+
+</div>
+
+<!-- ER -->
+<div id="er" class="section">
+
+<!-- <div class="card">
+<h3>ER Diagram</h3>
+<img src="erdiagram.png" class="img" onclick="zoom(this.src)">
+</div> -->
+
+<div class="card">
+<h3>ER Diagram (PDF)</h3>
+<iframe src="erdiagram.pdf" width="100%" height="600"></iframe>
+</div>
+
+</div>
+
+<!-- FLOWS -->
+<div id="flows" class="section">
+
+<div class="card">
+<h3>User Registration</h3>
+<p>Identity → Event → Policy + Admin</p>
+</div>
+
+<div class="card">
+<h3>Policy Creation</h3>
+<p>Policy → Event → Claims + Admin</p>
+</div>
+
+<div class="card">
+<h3>Claim Flow</h3>
+<p>Claims → Event → Admin</p>
+</div>
+
+</div>
+
+<!-- DOCS -->
+<div id="docs" class="section">
+
+<div class="card">
+<h3>Project Documents</h3>
+<ul>
+<li>HLD.md</li>
+<li>LLD.md</li>
+<li>README.md</li>
+</ul>
+</div>
+
+</div>
+
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="modal" onclick="this.style.display='none'">
+<img id="modal-img">
+</div>
+
+<script>
+function show(id,btn){
+document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'))
+document.getElementById(id).classList.add('active')
+
+document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'))
+btn.classList.add('active')
+}
+
+function zoom(src){
+document.getElementById('modal').style.display='flex'
+document.getElementById('modal-img').src=src
+}
+</script>
+
+</body>
+</html>
